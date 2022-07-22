@@ -1,13 +1,16 @@
 package com.example.nwcode.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.nwcode.ErrorActivity
 import com.example.nwcode.R
 import com.example.nwcode.adapters.CollectionAdapter
 import com.example.nwcode.viewModels.SecondPageViewModel
@@ -31,6 +34,13 @@ class SecondPage : Fragment(R.layout.fragment_second_page) {
 
         viewModel.collection.observe(viewLifecycleOwner){
             adapter.setCollection(it.results)
+            (activity as AppCompatActivity).supportActionBar?.title = it.results[0].title
+        }
+        viewModel.exception.observe(viewLifecycleOwner){
+            if (it == 1){
+                val intent = Intent(activity, ErrorActivity::class.java)
+                startActivity(intent)
+            }
         }
         recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter

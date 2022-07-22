@@ -1,6 +1,7 @@
 package com.example.nwcode.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.nwcode.ErrorActivity
 import com.example.nwcode.R
 import com.example.nwcode.adapters.CategoryAdapter
 import com.example.nwcode.viewModels.FirstPageViewModel
@@ -25,6 +27,12 @@ class FirstPage : Fragment(R.layout.fragment_first_page) {
         recyclerCategories = view.findViewById(R.id.categories_RV)
         viewModel.collections.observe(viewLifecycleOwner){
             adapter.setCategories(it)
+        }
+        viewModel.exception.observe(viewLifecycleOwner){
+            if (it == 1){
+                val intent = Intent(activity, ErrorActivity::class.java)
+                startActivity(intent)
+            }
         }
         recyclerCategories.adapter = adapter
         recyclerCategories.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
